@@ -1,5 +1,6 @@
 package com.algaworks.algalog.api.exceptions;
 
+import com.algaworks.algalog.domain.exceptions.NegocioException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -18,7 +20,7 @@ import java.util.List;
 
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @RestControllerAdvice
-public class ExceptionHandler extends ResponseEntityExceptionHandler {
+public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     private MessageSource messageSource;
 
@@ -45,5 +47,16 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
         problema.setCampos(campos);
 
         return handleExceptionInternal(ex, problema, headers, status, request);
+    }
+
+    @ExceptionHandler(NegocioException.class)
+    public ResponseEntity<Object> handleNegocioException(NegocioException ex, WebRequest request) {
+        Problema problema = new Problema();
+        problema.setStatus(HttpStatus.BAD_REQUEST.value());
+        problema.setDataHora(LocalDateTime.now());
+        problema.setTitulo(ex.getMessage());
+
+
+        return handleExceptionInternal(ex, problema, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 }
