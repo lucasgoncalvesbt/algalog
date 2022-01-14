@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,11 +21,14 @@ public class ClienteController {
 
     @GetMapping
     public ResponseEntity<List<Cliente>> listar() {
+
         return ResponseEntity.ok(clienteRepository.findAll());
+
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Cliente> findById(@PathVariable Long id) {
+
         Optional<Cliente> cliente = clienteRepository.findById(id);
 
         return cliente
@@ -34,8 +38,10 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<Cliente> create(@RequestBody Cliente cliente) {
+    public ResponseEntity<Cliente> create(@Valid @RequestBody Cliente cliente) {
+
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteRepository.save(cliente));
+
     }
 
     @PutMapping("/{id}")
