@@ -14,6 +14,13 @@ public class ClienteService {
 
     private final ClienteRepository clienteRepository;
 
+    public Cliente findById(Long id) {
+
+        return clienteRepository.findById(id)
+                .orElseThrow(() -> new NegocioException("Cliente não encontrado"));
+
+    }
+
     @Transactional
     public Cliente create(Cliente cliente) {
         boolean emailIsPresent = clienteRepository.findByEmail(cliente.getEmail())
