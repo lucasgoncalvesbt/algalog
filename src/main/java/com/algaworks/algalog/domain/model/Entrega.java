@@ -7,8 +7,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Getter
@@ -27,6 +28,7 @@ public class Entrega {
     @Embedded
     private Destinatario destinatario;
 
+    @NotNull
     private BigDecimal taxa;
 
     @JsonProperty(access = Access.READ_ONLY)
@@ -34,8 +36,8 @@ public class Entrega {
     private StatusEntrega status;
 
     @JsonProperty(access = Access.READ_ONLY)
-    private LocalDateTime dataPedido;
+    private OffsetDateTime dataPedido;
 
     @JsonProperty(access = Access.READ_ONLY)
-    private LocalDateTime dataFinalizacao;
+    private OffsetDateTime dataFinalizacao;
 }
